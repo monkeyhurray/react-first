@@ -1,6 +1,8 @@
 import "./App.css";
 import { useState } from "react";
-import Working from "./Working";
+import Working from "./components/todo/Working";
+import TodoController from "./components/todo/TodoController";
+import Header from "./components/layout/Header";
 function App() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -9,46 +11,17 @@ function App() {
 
   return (
     <>
-      <div className="entire">
-        <div className="title">
-          <h3>제목: &nbsp;</h3>
-          <input
-            className="titleInput"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div className="content">
-          <h3>내용: &nbsp;</h3>
-          <input
-            className="contentInput"
-            type="text"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-        </div>
+      <Header
+        title={title}
+        setTitle={setTitle}
+        content={content}
+        setContent={setContent}
+        todo={todo}
+        setTodo={setTodo}
+        isDone={isDone}
+      />
 
-        <button
-          className="addBtn"
-          onClick={() => {
-            if (title.trim() === "") {
-              alert("제목을 입력하세요");
-              return;
-            }
-            if (content.trim() === "") {
-              alert("내용을 입력하세요");
-              return;
-            }
-            setTodo([...todo, { id: todo.length, isDone, title, content }]);
-            setTitle("");
-            setContent("");
-          }}
-        >
-          추가하기
-        </button>
-      </div>
-      <Working
+      <TodoController
         todo={todo}
         setTodo={setTodo}
         isDone={isDone}

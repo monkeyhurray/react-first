@@ -1,29 +1,41 @@
 import { useState } from "react";
-import Done from "./Done";
 
-const Working = ({ todo, setTodo, setIsDone }) => {
-  const [done, setDone] = useState([]);
+const Working = ({ todo, setTodo, title }) => {
   const removeHandler = (id) => {
     const removeListArr = todo.filter((e) => e.id !== id);
     return setTodo(removeListArr);
   };
 
   const completeHandler = (id) => {
-    const addListArr = todo.filter((e) => {
-      e.isDone = true;
+    return setTodo((todo) => {
+      const addListArr = todo.map((element) => {
+        if (element.id === id) {
+          return { ...element, isDone: true };
+        }
+        return element;
+      });
 
-      const removeListArr = todo.filter((e) => e.id !== id);
-      setTodo(removeListArr);
-      return e.id === id;
+      return addListArr;
     });
-
-    return setDone([...done, ...addListArr]);
   };
+
+  const doneHandler = (id) => {
+    return setTodo((todo) => {
+      const addListArr = todo.map((element) => {
+        if (element.id === id) {
+          return { ...element, isDone: false };
+        }
+        return element;
+      });
+      return addListArr;
+    });
+  };
+
   return (
     <>
       <div className="titleGround">
         <b className="showTitle">
-          <h2>Working...</h2>
+          <h2>{title}</h2>
         </b>
       </div>
       <div className="contentGround">
@@ -31,7 +43,7 @@ const Working = ({ todo, setTodo, setIsDone }) => {
           <div className="showContent">
             {todo.map((e) => {
               return (
-                <div key={e.id} className="todoBox">
+                <div key={crypto.randomUUID()} className="todoBox">
                   <h3>리액트 공부하기</h3>
                   <div className="todoTitle">제목: {e.title}</div>
                   <div className="todoTitle">내용: {e.content}</div>
@@ -45,13 +57,16 @@ const Working = ({ todo, setTodo, setIsDone }) => {
                         삭제하기
                       </button>
                     </div>
+
                     <div className="rBtn">
                       <button
-                        onClick={() => {
-                          completeHandler(e.id);
-                        }}
+                        onClick={() =>
+                          e.isDone === true
+                            ? doneHandler(e.id)
+                            : completeHandler(e.id)
+                        }
                       >
-                        완료
+                        {e.isDone === true ? "취소" : "완료"}
                       </button>
                     </div>
                   </div>
@@ -61,13 +76,6 @@ const Working = ({ todo, setTodo, setIsDone }) => {
           </div>
         </div>
       </div>
-      <Done
-        setDone={setDone}
-        done={done}
-        setIsDone={setIsDone}
-        todo={todo}
-        setTodo={setTodo}
-      />
     </>
   );
 };
